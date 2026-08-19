@@ -1,0 +1,185 @@
+// EduBridge AI — Prisma schema
+// Uses SQLite for zero-friction local/hackathon setup.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  passwordHash  String
+  name          String
+  role          String
+  createdAt     DateTime @default(now())
+
+  studentProfile StudentProfile?
+  teacherProfile TeacherProfile?
+  preference     UserPreference?
+}
+
+model UserPreference {
+  id       String @id @default(cuid())
+  user     User   @relation(fields: [userId], references: [id])
+  userId   String @unique
+  language String @default("ENGLISH")
+  level    String @default("BEGINNER")
+}
+
+model StudentProfile {
+  id           String   @id @default(cuid())
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String   @unique
+  gradeLevel   String   @default("Class 10")
+  streakDays   Int      @default(0)
+  lastActiveAt DateTime @default(now())
+
+  masteryScores MasteryScore[]
+  quizAttempts  QuizAttempt[]
+  sessions      LearningSession[]
+  alerts        TeacherAlert[]
+}
+
+model TeacherProfile {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @unique
+  school String @default("Demo Public School")
+}
+
+model Subject {
+  id     String  @id @default(cuid())
+  name   String  @unique
+  topics Topic[]
+}
+
+model Topic {
+  id            String   @id @default(cuid())
+  name          String
+  subject       Subject  @relation(fields: [subjectId], references: [id])
+  subjectId     String
+  concepts      Concept[]
+  questions     Question[]
+  masteryScores MasteryScore[]
+  chunks        DocumentChunk[]
+
+  @@unique([subjectId, name])
+}
+
+model Concept {
+  id      String @id @default(cuid())
+  name    String
+  topic   Topic  @relation(fields: [topicId], references: [id])
+  topicId String
+}
+
+model MasteryScore {
+  id            String        @id @default(cuid())
+  student       StudentProfile @relation(fields: [studentId], references: [id])
+  studentId     String
+  topic         Topic         @relation(fields: [topicId], references: [id])
+  topicId       String
+  score         Float
+  attempts      Int           @default(0)
+  correct       Int           @default(0)
+  lastAttemptAt DateTime      @default(now())
+  trend         Float         @default(0)
+
+  @@unique([studentId, topicId])
+}
+
+model Question {
+  id           String         @id @default(cuid())
+  topic        Topic          @relation(fields: [topicId], references: [id])
+  topicId      String
+  type         String
+  difficulty   Int
+  prompt       String
+  options      String?
+  answer       String
+  explanation  String
+  quizAttempts AnswerAttempt[]
+}
+
+model Quiz {
+  id         String   @id @default(cuid())
+  studentId  String
+  topicId    String
+  createdAt  DateTime @default(now())
+  attempts   QuizAttempt[]
+}
+
+model QuizAttempt {
+  id             String         @id @default(cuid())
+  student        StudentProfile @relation(fields: [studentId], references: [id])
+  studentId      String
+  quiz           Quiz           @relation(fields: [quizId], references: [id])
+  quizId         String
+  score          Int
+  totalQuestions Int
+  accuracy       Float
+  durationSec    Int
+  createdAt      DateTime       @default(now())
+  answers        AnswerAttempt[]
+}
+
+model AnswerAttempt {
+  id            String      @id @default(cuid())
+  quizAttempt   QuizAttempt @relation(fields: [quizAttemptId], references: [id])
+  quizAttemptId String
+  question      Question    @relation(fields: [questionId], references: [id])
+  questionId    String
+  studentAnswer String
+  isCorrect     Boolean
+  timeTakenSec  Int         @default(0)
+  hintUsed      Boolean     @default(false)
+}
+
+model LearningSession {
+  id         String        @id @default(cuid())
+  student    StudentProfile @relation(fields: [studentId], references: [id])
+  studentId  String
+  question   String
+  answer     String
+  subject    String?
+  topic      String?
+  language   String        @default("ENGLISH")
+  level      String        @default("BEGINNER")
+  citations  String?
+  createdAt  DateTime      @default(now())
+}
+
+model KnowledgeDocument {
+  id      String           @id @default(cuid())
+  title   String
+  subject String
+  source  String
+  url     String?
+  chunks  DocumentChunk[]
+}
+
+model DocumentChunk {
+  id         String            @id @default(cuid())
+  document   KnowledgeDocument @relation(fields: [documentId], references: [id])
+  documentId String
+  topic     Topic?            @relation(fields: [topicId], references: [id])
+  topicId   String?
+  content   String
+  keywords  String
+}
+
+model TeacherAlert {
+  id         String        @id @default(cuid())
+  student    StudentProfile @relation(fields: [studentId], references: [id])
+  studentId  String
+  severity   String
+  message    String
+  reason     String
+  resolved   Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+}

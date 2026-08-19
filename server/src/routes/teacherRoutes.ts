@@ -1,0 +1,10 @@
+import { Router } from "express";
+import * as teacherController from "../controllers/teacherController";
+import { requireAuth, requireRole } from "../middleware/auth";
+const router = Router();
+router.use(requireAuth, requireRole("TEACHER"));
+router.get("/dashboard", teacherController.dashboard);
+router.get("/students", teacherController.students);
+router.get("/students/:id", teacherController.studentDetail);
+router.get("/alerts", teacherController.alerts);
+export default router;
