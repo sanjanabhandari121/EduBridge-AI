@@ -13,7 +13,12 @@ import metaRoutes from "./routes/meta";
 
 const app = express();
 
-app.use(cors({ origin: env.clientOrigin, credentials: true }));
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://edu-bridge-h49lj2wam-sanjanabhandari121s-projects.vercel.app"
+  ]
+}));
 app.use(express.json({ limit: "5mb" }));
 
 app.get("/api/health", (_req, res) => res.json({ status: "ok", aiProvider: env.aiProvider }));
