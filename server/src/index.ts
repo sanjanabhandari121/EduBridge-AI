@@ -16,7 +16,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://edu-bridge-h49lj2wam-sanjanabhandari121s-projects.vercel.app"
+    "https://edu-bridge-ai-three.vercel.app"
   ]
 }));
 app.use(express.json({ limit: "5mb" }));
