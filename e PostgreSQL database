@@ -1,0 +1,14 @@
+warning: in the working copy of 'server/prisma/schema.prisma', LF will be replaced by CRLF the next time Git touches it
+[1mdiff --git a/server/prisma/schema.prisma b/server/prisma/schema.prisma[m
+[1mindex 8ac8bcc..caf3930 100644[m
+[1m--- a/server/prisma/schema.prisma[m
+[1m+++ b/server/prisma/schema.prisma[m
+[36m@@ -6,7 +6,7 @@[m [mgenerator client {[m
+ }[m
+ [m
+ datasource db {[m
+[31m-  provider = "sqlite"[m
+[32m+[m[32m  provider = "postgresql"[m
+   url      = env("DATABASE_URL")[m
+ }[m
+ [m

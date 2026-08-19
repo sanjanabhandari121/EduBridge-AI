@@ -5,13 +5,30 @@
 @layer base {
   html {
     background-color: #FBF8F2;
+    width: 100%;
+    overflow-x: hidden;
   }
+
   body {
     @apply bg-paper text-ink font-sans antialiased;
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
   }
-  h1, h2, h3, h4 {
+
+  #root {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
     @apply font-display;
   }
+
   :focus-visible {
     outline: 2px solid #157A6E;
     outline-offset: 2px;
@@ -19,15 +36,27 @@
 }
 
 @layer components {
-  /* Ruled notebook-margin motif used to open major sections */
   .ledger-heading {
     @apply relative pl-4 border-l-2 border-teal/40;
   }
+
   .chapter-label {
     @apply font-mono text-xs uppercase tracking-widest text-teal-dark;
   }
+
   .card {
     @apply bg-white rounded-2xl border border-black/5 shadow-card;
+  }
+}
+
+@media (max-width: 767px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  .recharts-wrapper {
+    max-width: 100%;
   }
 }
 

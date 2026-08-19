@@ -80,14 +80,24 @@ export function Login() {
           </form>
         </div>
 
-        <div className="mt-4 card p-4 text-center">
-          <p className="text-xs text-slate mb-2">Try the demo</p>
-          <div className="flex gap-2 justify-center">
-            <button onClick={() => fillDemo("student")} className="text-xs px-3 py-1.5 rounded-full bg-teal-light text-teal-dark font-medium hover:bg-teal/20 transition">
-              Student demo
+        <div className="mt-4 card p-4">
+          <p className="text-xs text-slate mb-3 text-center">Try the demo — click to autofill</p>
+          <div className="space-y-2">
+            <button
+              onClick={() => fillDemo("student")}
+              className="w-full text-left px-3 py-2.5 rounded-xl bg-teal-light/60 hover:bg-teal/20 transition border border-teal/10"
+            >
+              <p className="text-xs font-semibold text-teal-dark">Student demo</p>
+              <p className="text-[11px] text-slate mt-0.5 font-mono">student@edubridge.demo</p>
+              <p className="text-[11px] text-slate font-mono">Demo123!</p>
             </button>
-            <button onClick={() => fillDemo("teacher")} className="text-xs px-3 py-1.5 rounded-full bg-marigold-light text-[#8A5A12] font-medium hover:bg-marigold/20 transition">
-              Teacher demo
+            <button
+              onClick={() => fillDemo("teacher")}
+              className="w-full text-left px-3 py-2.5 rounded-xl bg-marigold-light/60 hover:bg-marigold/20 transition border border-marigold/10"
+            >
+              <p className="text-xs font-semibold text-[#8A5A12]">Teacher demo</p>
+              <p className="text-[11px] text-slate mt-0.5 font-mono">teacher@edubridge.demo</p>
+              <p className="text-[11px] text-slate font-mono">Demo123!</p>
             </button>
           </div>
         </div>
